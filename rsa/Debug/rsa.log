@@ -1,0 +1,6 @@
+﻿  rsa.cpp
+f:\密码学实验\myrsa\rsa\rsa.cpp(20): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+f:\密码学实验\myrsa\rsa\rsa.cpp(87): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(119): note: 参见“strcpy”的声明
+  rsa.vcxproj -> F:\密码学实验\myrsa\rsa\.\Debug\rsa.exe
+  rsa.vcxproj -> .\Debug\rsa.pdb (Full PDB)

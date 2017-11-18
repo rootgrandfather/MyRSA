@@ -1,12 +1,10 @@
-// rsa.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
 #include <cmath>
 #include <ctime>
 #include <IOSTREAM>
 using namespace std;
-bool IsPrime(long prime)
+int e, d, n;//全局变量
+bool IsPrime(long prime)//是否素数
 {
 	for (int i=2;i<sqrt(prime);i++)
 	{
@@ -17,7 +15,7 @@ bool IsPrime(long prime)
 	}
 	return true;
 }
-void GeneratePrime(long* primeArr,int arrLen)
+void GeneratePrime(long* primeArr,int arrLen)//生成素数
 {
 	srand(time(NULL));
 	int r,i;
@@ -35,7 +33,6 @@ void GeneratePrime(long* primeArr,int arrLen)
 		}	
 	}
 }
-
 //欧几里得扩展算法
 int Exgcd(int m,int n,int &x)
 {
@@ -55,14 +52,26 @@ int Exgcd(int m,int n,int &x)
     }
     return n;
 }
-
+void RSAEncrypt(char * plainText,long long * encryptText,int len)//RSA加密
+{
+	for (int i = 0; i<len; i++)
+	{
+		encryptText[i] = (long long)pow((int)plainText[i], e) % n;
+	}
+}
+void RSADecrypt(long long * encryptText,char *plainText)
+{
+	for (int k = 0; k<(sizeof(encryptText) / sizeof(long long)); k++)//RSA解密
+	{
+		plainText[k] = (char)(pow(encryptText[k], d)) % n;
+	}
+}
 int main(int argc, char* argv[])
 {
 	long primeArr[2]={0};
 	GeneratePrime(primeArr,sizeof(primeArr)/sizeof(long));
 	//用欧几里德扩展算法求e,d
-	int e,d;
-	int n=primeArr[0]*primeArr[1];
+	n=primeArr[0]*primeArr[1];
 	int f=(primeArr[0]-1)*(primeArr[1]-1);
     for(int j = 3; j < f; j+=1331)
     {
@@ -74,23 +83,20 @@ int main(int argc, char* argv[])
         }
     }
 	char plainText[11]={0};
-	long* encryText=NULL;
-	strcpy(plainText,"3150604027");
-	
-	cout<<"明文："<<plainText<<endl;
-	int len=strlen(plainText);
-	encryText=new long[len];
-	for (int i=0;i<len;i++)
-	{
-		long tmp=(long)pow((int)plainText[i],e);
-		encryText[i]=(tmp)%n;
-	}
-	cout<<"密文："<<encryText<<endl;
-
-	for (int k=0;k<sizeof(encryText)/sizeof(long);k++)
-	{
-		plainText[k]=long(pow(encryText[k],d))%n;
-	}
-	cout<<"解密为"<<plainText<<endl;
+	long long* encryText=NULL;
+	strcpy(plainText,"我的学号是：3150604027");
+	cout << "明文：" << plainText << endl;
+	cout << "p：" << primeArr[0] << endl;
+	cout << "q：" << primeArr[1] << endl;
+	cout << "n：" << n << endl;
+	cout << "e：" << e << endl;
+	cout << "d：" << d << endl;
+	int len = strlen(plainText);
+	encryText=new long long[len];
+	RSAEncrypt(plainText, encryText, len);
+	cout<<"密文：" << (char*)encryText<<endl;
+	RSADecrypt(encryText, plainText);
+	cout<<"解密为："<<plainText<<endl;
+	system("pause");
 	return 0;
 }
